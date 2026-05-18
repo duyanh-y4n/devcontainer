@@ -1,0 +1,9 @@
+{
+  "name": "Ubuntu LTS base",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "remoteUser": "vscode",
+  // Run any install-*.sh scripts dropped by dpod-seed packages
+  "postCreateCommand": "for f in .devcontainer/install-*.sh; do [ -f \"$f\" ] && bash \"$f\"; done || true"
+}
