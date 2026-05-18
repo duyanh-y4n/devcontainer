@@ -1,0 +1,13 @@
+{
+  "id": "dpod-seed",
+  "version": "1.0.0",
+  "name": "dpod-seed",
+  "description": "Install the dpod-seed CLI for managing DevPod environments from verified upstream distros",
+  "options": {
+    "version": {
+      "type": "string",
+      "default": "latest",
+      "description": "Version of dpod-seed to install (e.g. v0.1.0). Defaults to the latest release."
+    }
+  }
+}
