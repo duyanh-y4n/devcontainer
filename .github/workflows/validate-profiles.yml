@@ -1,0 +1,48 @@
+name: Validate Profiles
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate-structure:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check profiles directory exists and is non-empty
+        run: |
+          if [ ! -d profiles ] || [ -z "$(ls -A profiles/ 2>/dev/null)" ]; then
+            echo "ERROR: no profiles found under profiles/"
+            exit 1
+          fi
+
+      - name: Validate profile structure
+        run: |
+          fail=0
+          for profile in profiles/*/; do
+            name=$(basename "$profile")
+            if [ ! -f "$profile/.devcontainer/devcontainer.json" ]; then
+              echo "ERROR: $name missing .devcontainer/devcontainer.json"
+              fail=1
+            fi
+            if [ ! -f "$profile/.devcontainer/Dockerfile" ]; then
+              echo "ERROR: $name missing .devcontainer/Dockerfile"
+              fail=1
+            fi
+          done
+          exit $fail
+
+  build-profiles:
+    runs-on: ubuntu-latest
+    needs: validate-structure
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build each profile
+        run: |
+          for profile in profiles/*/; do
+            name=$(basename "$profile")
+            echo "=== Building profile: $name ==="
+            docker build "$profile/.devcontainer/" --tag "dpod-profile-$name"
+          done
