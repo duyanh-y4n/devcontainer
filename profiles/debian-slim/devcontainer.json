@@ -1,0 +1,9 @@
+{
+  "name": "Debian Slim Base",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "."
+  },
+  "remoteUser": "root",
+  "features": {}
+}
